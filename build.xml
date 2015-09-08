@@ -1,0 +1,92 @@
+<project name="MutationTestingProblem" basedir="." default="main">
+
+	<tstamp>
+		<format property="today" pattern="yyyy-MM-dd HH:mm:ss" />
+	</tstamp>
+
+	<property name="src.dir" 		value="src" />
+	<property name="test.dir" 		value="test" />
+	<property name="lib.dir"     	value="lib"/>
+	<property name="dist.dir"     	value="dist"/>
+	<property name="build.dir" 		value="build" />
+	<property name="instance.dir" 	value="instances" />
+	<property name="classes.dir"	value="${build.dir}/classes" />
+	<property name="jar.dir" 		value="${build.dir}/jar" />	
+	<property name="report.dir"  	value="${build.dir}/junitreport"/>
+	<property name="build.time"  	value="${today}"/>
+
+	<echo>
+		Application: ${ant.project.name}
+		Build File : ${ant.file} 
+		Run Date   : ${build.time}
+		Run by     : ${user.name}
+		Build Dir  : ${build.dir}
+		Base Dir   : ${basedir}
+		Java Home  : ${java.home}
+	</echo>
+
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
+
+	<path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
+
+	<target name="junit" description='Run all JUnit tests.' depends="compile">
+		<mkdir dir="${report.dir}"/>
+		<junit printsummary="yes" haltonfailure="no" failureproperty="test.failed">
+			<classpath location="lib/junit-4.12.jar" />
+			<classpath location="lib/hamcrest-core-1.3.jar" />
+
+			<classpath location="${classes.dir}" />
+
+			<formatter type="xml" />
+			<formatter type="plain" />
+
+			<batchtest fork="yes" todir="${report.dir}">
+				<fileset dir="${test.dir}">
+					<include name="**/*Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Unit Test failure detected, check test results." if="test.failed" />
+	</target>
+
+	<target name="clean-build">
+		<delete dir="${build.dir}" />
+	</target>
+	
+	<target name="clean-dist">
+		<delete dir="${dist.dir}" />
+	</target>
+	
+	<target name="clean-all" depends="clean-build, clean-dist">
+	</target>
+
+	<target name="clean-test">
+		<delete>
+			<fileset dir="${classes.dir}" includes="**/*Test.class" />
+		</delete>
+	</target>
+
+	<target name="compile" depends="clean-all">
+		<mkdir dir="${classes.dir}" />
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" />
+		<javac includeantruntime="false" srcdir="${test.dir}" destdir="${classes.dir}" classpathref="classpath" />
+	</target>
+
+	<target name="jar" depends="junit, clean-test">
+		<mkdir dir="${jar.dir}" />
+		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
+	</target>
+	
+	<target name="dist">
+		<copy file="${jar.dir}/${ant.project.name}.jar" todir="${dist.dir}"/>
+		<mkdir dir="${dist.dir}/instances" />		
+		<copy todir="${dist.dir}/instances">
+			<fileset dir="${instance.dir}"/>
+		</copy>
+		<delete dir="${build.dir}" />
+	</target>
+	
+	<target name="main" depends="jar, dist" />
+</project>
