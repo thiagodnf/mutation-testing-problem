@@ -1,70 +1,70 @@
 package test.gres.problem.mtp;
 
 import static org.junit.Assert.assertEquals;
-import gres.problem.mtp.MTPProblem;
+import gres.problem.mtp.MutationTestingProblem;
 import org.junit.Test;
 
-public class MTPProblemTest {
+public class MutationTestingProblemTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheInstanceNameIsNull() {
-		new MTPProblem(null);
+		new MutationTestingProblem(null);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheInstanceNameIsEmpty() {
-		new MTPProblem("");
+		new MutationTestingProblem("");
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionIsNullOnMutationScore() {
-		new MTPProblem().getMutationScore(null);
+		new MutationTestingProblem().getMutationScore(null);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionIsEmptyOnMutationScore() {
-		new MTPProblem().getMutationScore(new int[]{});
+		new MutationTestingProblem().getMutationScore(new int[]{});
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionIsNullOnTestCaseScore() {
-		new MTPProblem().getTestCaseScore(null);
+		new MutationTestingProblem().getTestCaseScore(null);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionIsEmptyOnTestCaseScore() {
-		new MTPProblem().getTestCaseScore(new int[]{});
+		new MutationTestingProblem().getTestCaseScore(new int[]{});
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionIsNullOnPairWiseScore() {
-		new MTPProblem().getPairWiseScore(null);
+		new MutationTestingProblem().getPairWiseScore(null);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionIsEmptyOnPairWiseScore() {
-		new MTPProblem().getPairWiseScore(new int[]{});
+		new MutationTestingProblem().getPairWiseScore(new int[]{});
 	}
 	
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionSizeIsWrongOnMutationScore() {
-		new MTPProblem().getMutationScore(new int[]{0});
+		new MutationTestingProblem().getMutationScore(new int[]{0});
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionSizeIsWrongOnPairWiseScore() {
-		new MTPProblem().getPairWiseScore(new int[]{0});
+		new MutationTestingProblem().getPairWiseScore(new int[]{0});
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionSizeIsWrongOnTestCaseScore() {
-		new MTPProblem().getTestCaseScore(new int[]{0});
+		new MutationTestingProblem().getTestCaseScore(new int[]{0});
 	}	
 	
 	@Test
 	public void testShouldReturnZeroWhenAllGenesOfSolutionIsZero() {
-		MTPProblem problem = new MTPProblem();
+		MutationTestingProblem problem = new MutationTestingProblem();
 		
 		problem.setNumberOfTestCases(5);		
 		problem.setNumberOfMutants(5);

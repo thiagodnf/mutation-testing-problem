@@ -2,7 +2,7 @@ package gres.problem.mtp;
 
 import gres.problem.util.InstanceReader;
 
-public class MTPProblem {
+public class MutationTestingProblem {
 	
 	protected String instance;
 	
@@ -16,11 +16,11 @@ public class MTPProblem {
 	
 	protected int[][] pairWiseCoverage;
 	
-	public MTPProblem(){
+	public MutationTestingProblem(){
 		
 	}
 	
-	public MTPProblem(String instance) {
+	public MutationTestingProblem(String instance) {
 		if (instance == null || instance.isEmpty()) {
 			throw new IllegalArgumentException("Instance's name cannot be null or empty");
 		}
