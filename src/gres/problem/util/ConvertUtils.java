@@ -1,6 +1,5 @@
 package gres.problem.util;
 
-
 /**
  * ConvertUtils Class
  * 
@@ -13,6 +12,7 @@ public class ConvertUtils {
 	/**
 	 * Convert from string array to double array
 	 * @param array Array will be converted
+	 * 
 	 * @return A double array
 	 */
 	public static double[] toDoubleArray(String[] array){
@@ -31,6 +31,7 @@ public class ConvertUtils {
 	
 	/**
 	 * Convert from string array to int array
+	 * 
 	 * @param array Array will be converted
 	 * @return A int array
 	 */
@@ -46,20 +47,5 @@ public class ConvertUtils {
 		}
 		
 		return result;
-	}
-	
-	public static Object[] toObjectArray(String[] array){
-		if (array == null) {
-			throw new IllegalArgumentException("array shouldn't be null");
-		}
-		
-		Object[] result = new Object[array.length];
-		
-		for (int i = 0; i < array.length; i++) {
-			result[i] =  new Object();
-		}
-		
-		return result;
-	}
-
+	}	
 }
