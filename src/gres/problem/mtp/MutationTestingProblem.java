@@ -97,7 +97,22 @@ public class MutationTestingProblem {
 			throw new IllegalArgumentException("Size of solution cannot be different of number of test case");
 		}
 		
-		return 0.0;
+		int[] visited = new int[numberOfMutants];
+		int visitedPairs = 0;
+
+		for (int i = 0; i < solution.length; i++) {
+			if (solution[i] == 1) {
+				// Test case has been selected
+				for (int j = 0; j < numberOfPairWises; j++) {
+					if (pairWiseCoverage[j][i] == 1 && visited[j] == 0) {
+						visited[j] = 1;
+						visitedPairs++;
+					}
+				}
+			}
+		}
+		
+		return (double) visitedPairs / (double) numberOfPairWises;
 	}
 
 	public String getInstance() {
