@@ -6,6 +6,22 @@ import org.junit.Test;
 
 public class MutationTestingProblemTest {
 	
+	protected int[][] pairWiseCoverage = {
+		{1, 0 ,1 ,1 ,1},
+		{1, 0 ,0 ,1 ,0},
+		{0, 1 ,0 ,1 ,0},
+		{1, 1 ,0 ,1 ,0},
+		{0, 0 ,1 ,1 ,1}
+	};
+	
+	protected int[][] mutantsCoverage = {
+		{0, 1 ,0 ,1 ,0},
+		{0, 1 ,0 ,0 ,0},
+		{1, 0 ,0 ,1 ,1},
+		{1, 1 ,1 ,0 ,1},
+		{1, 0 ,1 ,1 ,1}
+	};
+		
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheInstanceNameIsNull() {
 		new MutationTestingProblem(null);
@@ -44,8 +60,7 @@ public class MutationTestingProblemTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionIsEmptyOnPairWiseScore() {
 		new MutationTestingProblem().getPairWiseScore(new int[]{});
-	}
-	
+	}	
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testShouldThrowAnExceptionWhenTheSolutionSizeIsWrongOnMutationScore() {
@@ -75,19 +90,33 @@ public class MutationTestingProblemTest {
 		assertEquals(0, problem.getMutationScore(new int[] { 0, 0, 0, 0, 0 }), 0);
 	}
 	
-//	@Test
-//	public void testShouldReturnOneWhenAllGenesOfSolutionIsOne() {
-//		MTPProblem problem = new MTPProblem();
-//		problem.setNumberOfTestCases(5);
-//		assertEquals(1, problem.getTestCaseScore(new int[] { 1, 1, 1, 1, 1 }), 0);
-//		assertEquals(1, problem.getPairWiseScore(new int[] { 1, 1, 1, 1, 1 }), 0);
-//		assertEquals(1, problem.getMutationScore(new int[] { 1, 1, 1, 1, 1 }), 0);
-//	}
+	@Test
+	public void testShouldReturnOneOnMutationScore() {
+		MutationTestingProblem problem = new MutationTestingProblem();
+		
+		problem.setNumberOfTestCases(5);
+		problem.setNumberOfMutants(5);
+		
+		problem.setMutantsCoverage(mutantsCoverage);
+		
+		assertEquals(1, problem.getMutationScore(new int[] { 1, 1, 1, 0, 0 }), 0);
+		assertEquals(1, problem.getMutationScore(new int[] { 1, 1, 0, 0, 0 }), 0);
+		assertEquals(1, problem.getMutationScore(new int[] { 0, 1, 0, 0, 1 }), 0);
+	}
 	
-//	@Test
-//	public void testShouldReturnRightSumWhenAllGenesOfSolutionIsOne() {
-//		MTPProblem problem = new MTPProblem();
-//		problem.setNumberOfTestCases(5);
-//		assertEquals(1, problem.getTestCaseScore(new int[] { 1, 1, 1, 1, 1 }), 0);
-//	}
+	@Test
+	public void testShouldReturnOneForAllFitnessFunctionWhenAllTestCaseisSelected() {
+		MutationTestingProblem problem = new MutationTestingProblem();
+		
+		problem.setNumberOfTestCases(5);		
+		problem.setNumberOfMutants(5);
+		problem.setNumberOfPairWises(5);
+		
+		problem.setMutantsCoverage(mutantsCoverage);
+		problem.setPairWiseCoverage(pairWiseCoverage);
+		
+		assertEquals(1, problem.getTestCaseScore(new int[] { 1, 1, 1, 1, 1 }), 0);
+		assertEquals(1, problem.getMutationScore(new int[] { 1, 1, 1, 1, 1 }), 0);
+		assertEquals(1, problem.getPairWiseScore(new int[] { 1, 1, 1, 1, 1 }), 0);
+	}
 }
