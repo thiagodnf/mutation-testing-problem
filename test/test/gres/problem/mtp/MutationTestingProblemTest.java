@@ -178,6 +178,8 @@ public class MutationTestingProblemTest {
 		assertEquals(1.0 / 3.0, problem.getSimilarity(2, 3, featuresCoverage), 0);
 		assertEquals(1.0 / 3.0, problem.getSimilarity(3, 2, featuresCoverage), 0);
 		
+		assertEquals(0, problem.getSimilarityScore(new int[] { 0, 0, 0, 1 }, similarity), 0);
+		
 		assertEquals(0, problem.getSimilarityScore(new int[] { 1, 0, 0, 1 }, similarity), 0);
 		assertEquals(1.0/3.0, problem.getSimilarityScore(new int[] { 0, 0, 1, 1 }, similarity), 0);
 		assertEquals(((1.0/2.0)+0+(1.0/3.0))/3,problem.getSimilarityScore(new int[] { 1, 0, 1, 1 }, similarity), 0);
