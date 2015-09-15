@@ -105,7 +105,7 @@ public class MutationTestingProblemTest {
 	}
 	
 	@Test
-	public void testShouldReturnOneForAllFitnessFunctionWhenAllTestCaseisSelected() {
+	public void testShouldReturnOneForAllFitnessFunctionWhenAllTestCaseIsSelected() {
 		MutationTestingProblem problem = new MutationTestingProblem();
 		
 		problem.setNumberOfTestCases(5);		
@@ -118,5 +118,24 @@ public class MutationTestingProblemTest {
 		assertEquals(1, problem.getTestCaseScore(new int[] { 1, 1, 1, 1, 1 }), 0);
 		assertEquals(1, problem.getMutationScore(new int[] { 1, 1, 1, 1, 1 }), 0);
 		assertEquals(1, problem.getPairWiseScore(new int[] { 1, 1, 1, 1, 1 }), 0);
+	}
+	
+	@Test
+	public void testShouldReturnAValidValue() {
+		MutationTestingProblem problem = new MutationTestingProblem();
+		
+		problem.setNumberOfTestCases(5);		
+		problem.setNumberOfMutants(5);
+		problem.setNumberOfPairWises(5);
+		
+		problem.setMutantsCoverage(mutantsCoverage);
+		problem.setPairWiseCoverage(pairWiseCoverage);
+		
+		assertEquals(2.0 / 5.0, problem.getSimilarity(3, 4, pairWiseCoverage), 0);
+		assertEquals(2.0 / 5.0, problem.getSimilarity(4, 3, pairWiseCoverage), 0);
+		assertEquals(2.0 / 5.0, problem.getSimilarity(2, 3, pairWiseCoverage), 0);
+		assertEquals(2.0 / 5.0, problem.getSimilarity(3, 2, pairWiseCoverage), 0);
+		assertEquals(1.0 / 4.0, problem.getSimilarity(0, 4, pairWiseCoverage), 0);
+		assertEquals(1.0 / 4.0, problem.getSimilarity(4, 0, pairWiseCoverage), 0);
 	}
 }

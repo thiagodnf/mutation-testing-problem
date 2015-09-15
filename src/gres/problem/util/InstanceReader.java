@@ -130,4 +130,14 @@ public class InstanceReader {
 
 		return result;
 	}
+	
+	public String[][] readStringMatrix(int i, int j, String separator) {
+		String[][] result = new String[i][j];
+
+		for (int k = 0; k < i; k++) {
+			result[k] = readLine().split(separator);
+		}
+
+		return result;
+	}
 }

@@ -1,6 +1,10 @@
 package gres.problem.mtp;
 
 import gres.problem.util.InstanceReader;
+import gres.problem.util.JaccardCoefficient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MutationTestingProblem {
 	
@@ -12,9 +16,21 @@ public class MutationTestingProblem {
 	
 	protected int numberOfPairWises;
 	
+	protected int numberOfFeatures;
+	
+	protected String[][] features;
+	
 	protected int[][] mutantsCoverage;
 	
 	protected int[][] pairWiseCoverage;
+	
+	protected int[][] featuresCoverage;
+	
+	protected double[][] similarityAmongMutants;
+
+	protected double[][] similarityAmongPairWises;
+	
+	protected double[][] similarityAmongFeatures;
 	
 	public MutationTestingProblem(){
 		
@@ -36,8 +52,46 @@ public class MutationTestingProblem {
 		this.mutantsCoverage = reader.readIntMatrix(numberOfMutants, numberOfTestCases, " ");
 		this.numberOfPairWises = reader.readInt();
 		this.pairWiseCoverage = reader.readIntMatrix(numberOfPairWises, numberOfTestCases, " ");
+		this.numberOfPairWises = reader.readInt();
+		this.features = reader.readStringMatrix(numberOfFeatures, numberOfTestCases, " ");
+		this.featuresCoverage = reader.readIntMatrix(numberOfFeatures, numberOfTestCases, " ");
 		
 		reader.close();
+		
+		this.similarityAmongMutants = new double[numberOfTestCases][numberOfTestCases];
+		this.similarityAmongPairWises = new double[numberOfTestCases][numberOfTestCases];
+		this.similarityAmongFeatures = new double[numberOfTestCases][numberOfTestCases];
+		
+		for (int i = 0; i < numberOfTestCases; i++) {
+			for (int j = i; j < numberOfTestCases; j++) {
+				if (i != j) {
+					this.similarityAmongMutants[i][j] = getSimilarity(i, j, mutantsCoverage);
+					this.similarityAmongMutants[j][i] = similarityAmongMutants[i][j];
+					this.similarityAmongPairWises[i][j] = getSimilarity(i, j, pairWiseCoverage);
+					this.similarityAmongPairWises[j][i] = similarityAmongPairWises[i][j];
+					this.similarityAmongFeatures[i][j] = getSimilarity(i, j, featuresCoverage);
+					this.similarityAmongFeatures[j][i] = similarityAmongFeatures[i][j];
+				}
+			}
+		}
+		
+		
+	}
+	
+	public double getSimilarity(int i, int j, int[][] matrix) {
+		List<Integer> m1 = new ArrayList<Integer>();
+		List<Integer> m2 = new ArrayList<Integer>();
+
+		for (int lin = 0; lin < matrix.length; lin++) {
+			if (matrix[lin][i] == 1) {
+				m1.add(lin);
+			}
+			if (matrix[lin][j] == 1) {
+				m2.add(lin);
+			}
+		}
+
+		return JaccardCoefficient.similarity(m1, m2);
 	}
 	
 	public double getTestCaseScore(int[] solution) {
@@ -113,6 +167,38 @@ public class MutationTestingProblem {
 		}
 		
 		return (double) visitedPairs / (double) numberOfPairWises;
+	}
+	
+	public double getSimilarityScore(int[] solution, double[][] matrix) {
+		double sum = 0.0;
+		double count = 0.0;
+		
+		for (int i = 0; i < solution.length; i++) {
+			if (solution[i] == 1) {
+				for (int j = 0; j < solution.length; j++) {
+					if (solution[j] == 1) {
+						if (i != j) {
+							sum += matrix[i][j];
+							count++;
+						}
+					}
+				}
+			}
+		}
+		
+		return sum / count;
+	}
+	
+	public double getSimilarityScoreAmongMutants(int[] solution) {
+		return getSimilarityScore(solution, similarityAmongMutants);
+	}
+	
+	public double getSimilarityScoreAmongPairWises(int[] solution) {
+		return getSimilarityScore(solution, similarityAmongPairWises);
+	}
+	
+	public double getSimilarityScoreAmongFeatures(int[] solution) {
+		return getSimilarityScore(solution, similarityAmongFeatures);
 	}
 
 	public String getInstance() {
