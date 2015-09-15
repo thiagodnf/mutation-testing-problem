@@ -52,7 +52,7 @@ public class MutationTestingProblem {
 		this.mutantsCoverage = reader.readIntMatrix(numberOfMutants, numberOfTestCases, " ");
 		this.numberOfPairWises = reader.readInt();
 		this.pairWiseCoverage = reader.readIntMatrix(numberOfPairWises, numberOfTestCases, " ");
-		this.numberOfPairWises = reader.readInt();
+		this.numberOfFeatures = reader.readInt();
 		this.features = reader.readStringMatrix(numberOfFeatures, numberOfTestCases, " ");
 		this.featuresCoverage = reader.readIntMatrix(numberOfFeatures, numberOfTestCases, " ");
 		
