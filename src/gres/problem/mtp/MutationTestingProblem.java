@@ -26,10 +26,6 @@ public class MutationTestingProblem {
 	
 	protected int[][] featuresCoverage;
 	
-	protected double[][] similarityAmongMutants;
-
-	protected double[][] similarityAmongPairWises;
-	
 	protected double[][] similarityAmongFeatures;
 	
 	public MutationTestingProblem(){
@@ -58,24 +54,16 @@ public class MutationTestingProblem {
 		
 		reader.close();
 		
-		this.similarityAmongMutants = new double[numberOfTestCases][numberOfTestCases];
-		this.similarityAmongPairWises = new double[numberOfTestCases][numberOfTestCases];
 		this.similarityAmongFeatures = new double[numberOfTestCases][numberOfTestCases];
 		
 		for (int i = 0; i < numberOfTestCases; i++) {
 			for (int j = i; j < numberOfTestCases; j++) {
 				if (i != j) {
-					this.similarityAmongMutants[i][j] = getSimilarity(i, j, mutantsCoverage);
-					this.similarityAmongMutants[j][i] = similarityAmongMutants[i][j];
-					this.similarityAmongPairWises[i][j] = getSimilarity(i, j, pairWiseCoverage);
-					this.similarityAmongPairWises[j][i] = similarityAmongPairWises[i][j];
 					this.similarityAmongFeatures[i][j] = getSimilarity(i, j, featuresCoverage);
 					this.similarityAmongFeatures[j][i] = similarityAmongFeatures[i][j];
 				}
 			}
 		}
-		
-		
 	}
 	
 	public double getSimilarity(int i, int j, int[][] matrix) {
@@ -169,7 +157,7 @@ public class MutationTestingProblem {
 		return (double) visitedPairs / (double) numberOfPairWises;
 	}
 	
-	public double getSimilarityScore(int[] solution, double[][] matrix) {
+	public double getSimilarityScore(int[] solution, double[][] coverage) {
 		double sum = 0.0;
 		double count = 0.0;
 		
@@ -178,7 +166,7 @@ public class MutationTestingProblem {
 				for (int j = 0; j < solution.length; j++) {
 					if (solution[j] == 1) {
 						if (i != j) {
-							sum += matrix[i][j];
+							sum += coverage[i][j];
 							count++;
 						}
 					}
@@ -189,15 +177,7 @@ public class MutationTestingProblem {
 		return sum / count;
 	}
 	
-	public double getSimilarityScoreAmongMutants(int[] solution) {
-		return getSimilarityScore(solution, similarityAmongMutants);
-	}
-	
-	public double getSimilarityScoreAmongPairWises(int[] solution) {
-		return getSimilarityScore(solution, similarityAmongPairWises);
-	}
-	
-	public double getSimilarityScoreAmongFeatures(int[] solution) {
+	public double getSimilarityScore(int[] solution) {
 		return getSimilarityScore(solution, similarityAmongFeatures);
 	}
 
@@ -243,5 +223,9 @@ public class MutationTestingProblem {
 
 	public void setPairWiseCoverage(int[][] pairWiseCoverage) {
 		this.pairWiseCoverage = pairWiseCoverage;
+	}
+	
+	public void setFeaturesCoverage(int[][] featuresCoverage) {
+		this.featuresCoverage = featuresCoverage;
 	}
 }

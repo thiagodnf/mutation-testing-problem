@@ -138,4 +138,50 @@ public class MutationTestingProblemTest {
 		assertEquals(1.0 / 4.0, problem.getSimilarity(0, 4, pairWiseCoverage), 0);
 		assertEquals(1.0 / 4.0, problem.getSimilarity(4, 0, pairWiseCoverage), 0);
 	}
+	
+	@Test
+	public void testShouldReturnAValidValueForSimilarityScore() {
+		MutationTestingProblem problem = new MutationTestingProblem();
+		
+		problem.setNumberOfTestCases(5);		
+		
+		int[][] featuresCoverage = new int[][]{
+			{1,1,1,0},
+			{0,0,1,1},
+			{0,0,0,1},
+		};
+		
+		double[][] similarity = new double[4][4];
+		
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (i != j) {
+					similarity[i][j] = problem.getSimilarity(i, j, featuresCoverage);
+					similarity[j][i] = similarity[i][j];
+				}
+			}
+		}
+		
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				double v1 = problem.getSimilarity(i, j, featuresCoverage);
+				double v2 = problem.getSimilarity(j, i, featuresCoverage);
+				assertEquals(v1, v2, 0);
+				assertEquals(v2, v1, 0);
+			}
+		}
+				
+		assertEquals(1.0 / 1.0, problem.getSimilarity(0, 1, featuresCoverage), 0);
+		assertEquals(1.0 / 1.0, problem.getSimilarity(1, 0, featuresCoverage), 0);
+		assertEquals(1.0 / 2.0, problem.getSimilarity(2, 0, featuresCoverage), 0);
+		assertEquals(1.0 / 2.0, problem.getSimilarity(0, 2, featuresCoverage), 0);
+		assertEquals(1.0 / 3.0, problem.getSimilarity(2, 3, featuresCoverage), 0);
+		assertEquals(1.0 / 3.0, problem.getSimilarity(3, 2, featuresCoverage), 0);
+		
+		assertEquals(0, problem.getSimilarityScore(new int[] { 1, 0, 0, 1 }, similarity), 0);
+		assertEquals(1.0/3.0, problem.getSimilarityScore(new int[] { 0, 0, 1, 1 }, similarity), 0);
+		assertEquals(((1.0/2.0)+0+(1.0/3.0))/3,problem.getSimilarityScore(new int[] { 1, 0, 1, 1 }, similarity), 0);
+		assertEquals(((1.0/2.0)+0+(1.0/3.0))/3,problem.getSimilarityScore(new int[] { 0, 1, 1, 1 }, similarity), 0);
+		assertEquals((1.0+0.0+0.0)/3.0,problem.getSimilarityScore(new int[] { 1, 1, 0, 1 }, similarity), 0);
+	}
 }
